@@ -13,12 +13,20 @@ const provider = new GoogleAuthProvider();
 const auth = getAuth(app);
 provider.setCustomParameters({ prompt: 'select_account' });
 
-export function login() {
-    signInWithPopup(auth, provider).catch(console.error);
+export function login(callback) {
+     signInWithPopup(auth, provider)
+        .then((result) => {
+            callback(result.user);
+        })
+        .catch(console.error);
 }
 
-export function logout() {
-    signOut(auth).catch(console.error);
+export async function logout(callback) {
+    signOut(auth)
+        .then(() => {
+            callback();
+        })
+        .catch(console.error);
 }
 
 export function onUserStateChange(callback) {
