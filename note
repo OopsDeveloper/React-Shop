@@ -1,0 +1,40 @@
+*vite Tailwindcss 설치
+1️⃣ Tailwindcss 설치
+npm install -D tailwindcss@3
+npx tailwindcss init
+
+2️⃣ tailwind.config.js 설정
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./src/**/*.{js,ts,jsx,tsx}'],
+  theme: {
+    extend: {
+      colors: {
+        brand: '#F96162',
+      },
+    },
+  },
+  plugins: [],
+};
+
+3️⃣ index.css에 Tailwind 지시어 추가
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+4️⃣ main.jsx에서 index.css 불러오기
+import './index.css'
+
+5️⃣ postcss.config.js 생성 (PostCSS 필요할 경우)
+export default {
+    plugins: {
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+};
+
+6️⃣ 에러 발생 시 postcss 및 autoprefixer 설치
+npm install -D postcss autoprefixer
+
+7️⃣ Vite 서버 실행
+npm run dev
