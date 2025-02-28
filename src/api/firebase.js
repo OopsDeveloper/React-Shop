@@ -81,9 +81,30 @@ export async function getCart(userId) {
 }
 
 export async function addOrUpdateToCart(userId, product) {
-    return set(ref(database, `carts/${userId}/${product.id}`), product);
+    const productKey = `${product.id}_${product.option}`;
+    const cartRef = ref(database, `carts/${userId}/${productKey}`);
+
+    return get(cartRef).then((snapshot) => {
+        const existingProduct = snapshot.val();
+
+        if (existingProduct) {
+            return set(cartRef, {
+                ...existingProduct,
+                quantity: existingProduct.quantity + 1
+            });
+        } else {
+            return set(cartRef, {...product, productKey});
+        }
+    });
 }
 
-export async function removeFromCart(useId, projectId) {
-    return remove(ref(database, `carts/${userId}/${productId}`));
+export async function updateCartQuantity(userId, product) {
+    const productKey = `${product.id}_${product.option}`;
+    const cartRef = ref(database, `carts/${userId}/${productKey}`);
+    
+    return set(cartRef, {...product});
+}
+
+export async function removeFromCart(userId, productKey) {
+    return remove(ref(database, `carts/${userId}/${productKey}`));
 }

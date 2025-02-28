@@ -7,7 +7,7 @@ export default {
         brand: 'rgb(40 50 171)',
       },
       backgroundImage: {
-        banner: `url('../public/images/banner.jpg')`,
+        banner: `url('/images/banner.jpg')`,
       }
     },
   },

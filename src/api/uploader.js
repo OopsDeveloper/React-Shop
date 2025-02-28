@@ -7,5 +7,9 @@ export async function uploadImage(file) {
         body: data
     })
         .then(res => res.json())
-        .then((data) => data.url);
+        .then((data) => {
+            const originalUrl = data.url;
+            const resizedUrl = originalUrl.replace("/upload/","/upload/w_490,h_621,c_fill/")
+            return resizedUrl;
+        });
 }

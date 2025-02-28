@@ -1,23 +1,52 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Button from '../components/ui/Button';
-import { useAuthContext } from '../context/AuthContext';
-import { addOrUpdateToCart } from '../api/firebase';
+import useCart from '../hooks/useCart';
+import Swal from "sweetalert2";
 
 export default function ProductDetail() {
-    const { uid } = useAuthContext();
+    const { cartQuery, addOrUpdateItem } = useCart();
     const {
         state: {
             product: { id, image, title, description, category, price, options }
         }
     } = useLocation();
+
     const [selected, setSelected] = useState(options && options[0]);
 
     const handleSelect = (e) => setSelected(e.target.value);
 
-    const handleClick = (e) => {
+    const handleClick = () => {
         const product = { id, image, title, price, option: selected, quantity: 1 };
-        addOrUpdateToCart(uid, product);
+
+        const isAlreadyInCart = cartQuery.data?.some(
+            (item) => item.id === product.id && item.option === product.option
+        );
+
+        if (isAlreadyInCart) {
+            addOrUpdateItem.mutate(product, {
+                onSuccess: () => {
+                    Swal.fire({
+                        title: "장바구니 추가",
+                        text: "상품 수량이 증가되었습니다!",
+                        icon: "success",
+                        confirmButtonText: "확인"
+                    })
+                }
+            });
+            return;
+        }
+
+        addOrUpdateItem.mutate(product, {
+            onSuccess: () => {
+                Swal.fire({
+                    title: "장바구니 추가",
+                    text: "장바구니에 추가되었습니다!",
+                    icon: "success",
+                    confirmButtonText: "확인"
+                })
+            }
+        });
     }
 
     return (
