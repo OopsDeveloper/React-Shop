@@ -20,7 +20,6 @@ export default function useCart() {
 
     const updateCartItem = useMutation({
         mutationFn: async (product) => {
-            console.log("updateCartItem 실행됨, product:", product);
             return updateCartQuantity(uid, product);
         },
         onSuccess: () => {
