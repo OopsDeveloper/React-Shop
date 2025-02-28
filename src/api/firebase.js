@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "firebase/auth";
-import { getDatabase, ref, set, get } from "firebase/database";
+import { getDatabase, ref, set, get, remove } from "firebase/database";
 import {v4 as uuid} from 'uuid';
 
 const firebaseConfig = {
@@ -61,4 +61,29 @@ export async function addNewProduct(product, image) {
         image,
         options: product.options.split(','),
     })
+}
+
+export async function getProducts() {
+    return get(ref(database, 'products'))
+        .then((snapshot) => {
+            return snapshot.exists 
+                ? Object.values(snapshot.val()) 
+                : [];
+        });
+}
+
+export async function getCart(userId) {
+    return get(ref(database , `carts/${userId}`))
+        .then(snapshot => {
+            const items = snapshot.val() || {};
+            return Object.values(items);
+        });
+}
+
+export async function addOrUpdateToCart(userId, product) {
+    return set(ref(database, `carts/${userId}/${product.id}`), product);
+}
+
+export async function removeFromCart(useId, projectId) {
+    return remove(ref(database, `carts/${userId}/${productId}`));
 }

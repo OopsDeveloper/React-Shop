@@ -4,8 +4,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        brand: 'rgb(86 99 255)',
+        brand: 'rgb(40 50 171)',
       },
+      backgroundImage: {
+        banner: `url('../public/images/banner.jpg')`,
+      }
     },
   },
   plugins: [],
