@@ -16,6 +16,7 @@ export default function NewProduct() {
             setFile(files && files[0]);
             return;
         }
+        
         setProduct((product) => ({ ...product, [name]: value }));
     }
 
